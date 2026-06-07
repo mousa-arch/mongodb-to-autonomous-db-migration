@@ -3,6 +3,29 @@
 ## Overview
 This architectural framework demonstrates the technical migration path for moving legacy MongoDB database workloads to Oracle Autonomous JSON Database (AJD). This solution ensures high availability and near-zero downtime using Oracle GoldenGate for real-time data replication.
 
+## Architecture
+
+```mermaid
+graph TD
+    %% Define Nodes
+    Source[(MongoDB Source<br>OCI Compute/Hybrid)]
+    Extract[Capture Process<br>GoldenGate Extract]
+    GoldenGate{{Oracle GoldenGate<br>for Big Data}}
+    Apply[Apply Process<br>GoldenGate Replicat]
+    Target[(Oracle Autonomous<br>JSON Database)]
+    
+    %% Define Workflow
+    Source -->|1. Read BSON/Oplog| Extract
+    Extract -->|2. Write Trail Files| GoldenGate
+    GoldenGate -->|3. Route & Transform| Apply
+    Apply -->|4. Apply JSON Transactions| Target
+
+    %% Styling
+    style Source fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    style GoldenGate fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style Target fill:#f9d0c4,stroke:#c82124,stroke-width:2px
+```
+
 ## Key Architecture Components
 * **Source:** MongoDB running on OCI Compute / Hybrid Cloud
 * **Target:** Oracle Autonomous JSON Database (AJD)
